@@ -54,7 +54,7 @@ unsigned int unIPD_id;
 
 u08 test_string[]                 = "AT+CWMODE=3\r\n";
 u08 test_string_cwlap[]           = "AT+CWLAP\r\n";
-u08 test_string_cwjap[]           = "AT+CWJAP=\"Kino0188\",\"72487248aa\"\r\n";
+u08 test_string_cwjap[]           = "AT+CWJAP=\"Kino0188\",\"abcdefg1111\"\r\n";
 u08 test_string_cifsr[]           = "AT+CIFSR\r\n";
 u08 test_string_send_stop[]       = "AT+CIPCLOSE=1\r\n";
 u08 test_string_send_cipstart[]   = "AT+CIPSTART=1,\"TCP\",\"192.168.0.14\",80\r\n";
