@@ -72,42 +72,14 @@
 #define FILTER_NUM								10U
 #define CAL_CONSTANT_12BIT_VOLTAGE				0.00080f // 3.3 / 4096 [V]
 #define CAL_CONSTANT_12BIT_MILI_VOLT			0.8056640625f // 3300 / 4096 [mV]
-
-//#define CAL_CONSTANT_AC_VOLTAGE					0.002817f // 1 / 0.002817 = 354.9875f
-#define CAL_CONSTANT_AC_VOLTAGE						354.9875f
- // 계산 값 : Sensor Out_Current = (Input AC * 1.414) / (100 * 1000) * 2.5,  Out_Current * 120(Shunt Resistor) = Outplut Volt 0.004242f
- // 실제 측정 : 0.004242f로 하면 피크값을 두고 계산하므로 0.00260883f 8프로 => 0.0002087064
- // 0.0028175364f
-
-/*
-#define CAL_CONSTANT_PWR_28V					0.08338744f // 계산 측정 : 0.078674f//1%당 0.00078674 를 078674f에서 더하면 됨 //
-// Out_Volt = Digital AD * Mili Volt Coeff * (1.5k/271.5k = 0.005524) * 8.0 * 1.78 =  Digital AD * Mili Volt Coeff * 0.005524 * 14.24
-// Out_Volt = Digital AD * Mili Volt Coeff * 0.005524 * 14.24 = Digital AD * Mili Volt Coeff * 0.078674
-*/
-//#define CAL_CONSTANT_PWR_28V					0.05f // 1 / 0.05 = 20
+#define CAL_CONSTANT_AC_VOLTAGE					354.9875f
 #define CAL_CONSTANT_PWR_28V					20.0f
-// Out_Volt = Digital AD * Mill Volt Coeff * (10k/200k = 0.05f) = Digital AD * Mill Volt Coeff * 0.05f
-
 #define CAL_CONSTANT_PWR_40A					0.08f
-// Out_Current = ((Digital AD * Mili Volt Coeff) - 2500) * 80(Coeff), [mA] ((Digital AD * Mili Volt Coeff) - 2500) * 0.08(Coeff), [A]
-
-
 #define CAL_CONSTANT_NTC_VOLT					4.3f // 입력저항 분배비 // 실측이후 4.0f에서 4.3f으로 변경
-// ( 저항을 4.7K로 단독으로 봤을 경우 )
-// Out Temp Sensor(NTC) Volt = (Digital AD * Volt Coeff) * 4.0 [V]
-// -40 ~ 25.0 = y = -3.349x4 + 22.88x3 - 58.281x2 + 87.01x - 55.355
-// 25.0 ~125  = y = 10.462x4 - 140.56x3 + 707.22x2 - 1551.9x + 1273.6
-// ( 합성저항으로 2.16K로 봤을 경우)
-// - 40 ~ 25도  y = 25.778x3 - 85.345x2 + 118.23x - 48.694
-// 25 ~ 125도 y = 4.3299x3 - 33.072x2 + 105.43x - 77.8
 #define TEMP_COMP								(CAL_CONSTANT_12BIT_MILI_VOLT * CAL_CONSTANT_NTC_VOLT)
-
 #define CAL_CONSTANT_24V						13.0f // 13 * 3300 / 4096
-// Out_Volt = (Digital AD * Mili Volt Coeff) * 13.0
-
 #define NTC_OFFSET								5U
 #define CAL_CONSTANT_5V_3V						2.0f // 2 * 3300 / 4096
- // Out_Volt = (Digital AD * Mili Volt Coeff) * 2.0f
 #define ADC_3_INDEX								15U
 
 // 20us 
@@ -518,24 +490,6 @@ typedef struct
 {
 	uint32_t		tlc59482_data_32[16];
 	uint32_t		tlc59482_data_32_real[16];
-	/* -- LED PWM 들어가는 변수 --
-	gval->tlc59482_data.tlc59482_data_32[0] = TLC59482_LED_OFF_32; // FAN_R_R , CAN_R
-	gval->tlc59482_data.tlc59482_data_32[1] = TLC59482_LED_ON_32_0; // FAN_R_G , CAN_G
-	gval->tlc59482_data.tlc59482_data_32[2] = TLC59482_LED_ON_32_0; // FAN_L_R , P3_R
-	gval->tlc59482_data.tlc59482_data_32[3] = TLC59482_LED_OFF_32; // FAN_L_G , P3_G
-	gval->tlc59482_data.tlc59482_data_32[4] = TLC59482_LED_OFF_32; // DC_R , P2_R
-	gval->tlc59482_data.tlc59482_data_32[5] = TLC59482_LED_OFF_32; // DC_G , P2_G
-	gval->tlc59482_data.tlc59482_data_32[6] = TLC59482_LED_OFF_32; // AC_R , P1_R
-	gval->tlc59482_data.tlc59482_data_32[7] = TLC59482_LED_OFF_32; // AC_G , P1_G
-	gval->tlc59482_data.tlc59482_data_32[8] = TLC59482_LED_OFF_32; // LOAD_100_R , X
-	gval->tlc59482_data.tlc59482_data_32[9] = TLC59482_LED_OFF_32; // LOAD_100_G , X
-	gval->tlc59482_data.tlc59482_data_32[10] = TLC59482_LED_OFF_32; // LOAD_75_R , X
-	gval->tlc59482_data.tlc59482_data_32[11] = TLC59482_LED_OFF_32; // LOAD_75_G , X
-	gval->tlc59482_data.tlc59482_data_32[12] = TLC59482_LED_OFF_32;// LOAD_50_R , TEMP_E_R
-	gval->tlc59482_data.tlc59482_data_32[13] = TLC59482_LED_OFF_32; // LOAD_50_G , TEMP_E_G
-	gval->tlc59482_data.tlc59482_data_32[14] = TLC59482_LED_OFF_32; // LOAD_25_R , TEMP_R
-	gval->tlc59482_data.tlc59482_data_32[15] = TLC59482_LED_OFF_32; // LOAD_25_G , TEMP_G
-	*/
 } S_TLC59482_DATA;
 
 typedef struct
@@ -631,6 +585,18 @@ typedef struct
 
 typedef struct
 {
+	uint8_t				Ovp_Log;
+	uint8_t				Ocp_Log;
+	uint8_t				Otp_Log;
+	uint8_t				p1_Log;
+	uint8_t				p2_Log;
+	uint8_t				p3_Log;
+	uint8_t				fanL_Log;
+	uint8_t				fanR_Log;
+} S_FW_LOG_STATUS;
+
+typedef struct
+{
 	S_FW_VERSION		fw_version;
 	S_FW_VOLT_CURRENT	fw_volt_current_1;
 	S_FW_VOLT_CURRENT	fw_volt_current_2;
@@ -644,6 +610,7 @@ typedef struct
 	S_FW_TEMP_TEMP_1	fw_temp_temp_3_2;
 	S_FW_LOAD			fw_load;
 	S_FW_LAMP_STATUE	fw_lamp_status;
+	S_FW_LOG_STATUS		fw_log_status;
 } S_CAN_CBIT;
 
 typedef struct
