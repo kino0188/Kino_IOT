@@ -12,7 +12,8 @@ const void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim->Instance == htim1.Instance) 
 	{
-		uint16_t temp = 0;
+		// 20241222 20use 주기로 변경
+		uint16_t temp_htim1 = 0;
 
 		Timer_Count++; 
 		
@@ -20,9 +21,9 @@ const void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		flag_2ms();
 		flag_1ms();
 		
-		temp = (uint32_t)(Timer_Count % ADC_PERIOD); 
+		temp_htim1 = (uint32_t)(Timer_Count % ADC_PERIOD);
 
-		if(0 == temp)
+		if(0 == temp_htim1)
 		{
 			uint8_t f = 1U;
 
@@ -45,6 +46,7 @@ const void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	}
 }
 
+// 20us 변경 20241222
 void flag_20us()
 {
 	if(0 == gval.flag.tlc59482_tx_flag) // SCLK Clock Generation 40us
@@ -60,11 +62,11 @@ void flag_20us()
 
 void flag_2ms()
 {
-	uint32_t temp = 0;
+	uint32_t temp_2ms = 0;
 
-	temp = (uint32_t)(Timer_Count % DISPLAY_PERIOD); // 16개 : 40us 640us
+	temp_2ms = (uint32_t)(Timer_Count % DISPLAY_PERIOD); // 16개 : 40us 640us
 
-	if(0 == temp)
+	if(0 == temp_2ms)
 	{
 		gval.flag.panel_flag = 1U;  // 2ms 시행시간
 	}
@@ -76,10 +78,10 @@ void flag_2ms()
 
 void flag_1ms()
 {
-	uint32_t temp = 0;
+	uint32_t temp_1ms = 0;
 
-	temp = (uint32_t)(Timer_Count % FAN_CHK_PERIOD);
-	if(0 == temp)
+	temp_1ms = (uint32_t)(Timer_Count % FAN_CHK_PERIOD);
+	if(0 == temp_1ms)
 	{
 		gval.flag.fan_flag = 1U; // 1ms 확인 시행시간 0.4us, 다음 파형 시간 1.15ms
 
@@ -102,10 +104,10 @@ void flag_1ms()
 
 void flag_10ms()
 {
-	uint32_t temp = 0;
+	uint32_t temp_10ms = 0;
 
-	temp = (uint32_t)(Timer_Count % ADC_PERIOD); // 10ms timer
-	if(0 == temp)
+	temp_10ms = (uint32_t)(Timer_Count % ADC_PERIOD); // 10ms timer
+	if(0 == temp_10ms)
 	{
 		uint8_t f = 1U;
 
@@ -126,10 +128,10 @@ void flag_10ms()
 
 void flag_100ms()
 {
-	uint32_t temp = 0;
+	uint32_t temp_100ms = 0;
 
-	temp = (uint32_t)(Timer_Count % CAN_PERIOD);
-	if(0 == temp)
+	temp_100ms = (uint32_t)(Timer_Count % CAN_PERIOD);
+	if(0 == temp_100ms)
 	{
 		uint8_t e = 1U;
 		uint8_t d = 1U;
@@ -207,11 +209,11 @@ void flag_100ms()
 
 void flag_1s()
 {
-	uint32_t temp = 0;
+	uint32_t temp_1s = 0;
 
-	temp = (uint32_t)(Timer_Count % ONE_SEC_PERIOD);
+	temp_1s = (uint32_t)(Timer_Count % ONE_SEC_PERIOD);
 
-	if(0 == temp)
+	if(0 == temp_1s)
 	{
 		uint16_t b = 0;
 		uint8_t d = 1U;
