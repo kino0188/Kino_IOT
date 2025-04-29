@@ -32,17 +32,6 @@ uint8_t findMax() {
     return max;
 }
 
-const void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
-{
-	if(HAL_OK == hadc->ErrorCode)
-	{
-		if(hadc->Instance == hadc1.Instance)
-		{
-			;
-		}
-	}
-}
-
 void ADC_Conversion_1()
 {
 	f32 ftemp = 0.0f;
